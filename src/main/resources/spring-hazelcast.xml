@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config/>
+
+    <bean id="client" factory-method="newHazelcastClient" class="com.hazelcast.client.HazelcastClient">
+        <constructor-arg index="0" ref="config"/>
+    </bean>
+
+    <bean id="config" class="com.hazelcast.client.config.ClientConfig">
+        <property name="serializationConfig" ref="serializationConfig"/>
+        <property name="networkConfig" ref="clientNetworkConfig"/>
+    </bean>
+
+    <bean id="serializationConfig" class="com.hazelcast.config.SerializationConfig"/>
+
+    <bean id="clientNetworkConfig" class="com.hazelcast.client.config.ClientNetworkConfig">
+       <property name="addresses">
+           <list>
+               <value>192.168.0.25:5709</value>
+           </list>
+       </property>
+    </bean>
+
+
+    <bean id="priorityPortableHookAppenderBeanPostProcessor"
+          class="com.potapov.hazelcast.client.bpp.PriorityPortableHookAppenderBeanPostProcessor"/>
+    <bean id="serviceConfigAppenderBeanPostProcessor"
+          class="com.potapov.hazelcast.client.bpp.ProxyFactoryConfigAppenderBeanPostProcessor"/>
+
+
+</beans>
